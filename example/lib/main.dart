@@ -49,6 +49,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Themed(
+      onBrightnessChanged: () {
+        return Brightness.light;
+      },
       child: MaterialApp(
         title: 'Themed example',
         debugShowCheckedModeBanner: false,
@@ -143,9 +146,7 @@ class _ColorSettingsPageState extends State<ColorSettingsPage> {
           const ExampleText(),
           //
           SwitchListTile(
-            title: _usingStaticMethod
-                ? const Text('Themed.[static method]')
-                : const Text('Themed.of(context)'),
+            title: _usingStaticMethod ? const Text('Themed.[static method]') : const Text('Themed.of(context)'),
             value: _usingStaticMethod,
             onChanged: (bool value) {
               setState(() {
@@ -158,8 +159,7 @@ class _ColorSettingsPageState extends State<ColorSettingsPage> {
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child:
-                    _usingStaticMethod ? _usingThemedStaticMethod() : _usingThemedOf(ctx),
+                child: _usingStaticMethod ? _usingThemedStaticMethod() : _usingThemedOf(ctx),
               ),
             ),
           ),
@@ -201,9 +201,8 @@ class _ColorSettingsPageState extends State<ColorSettingsPage> {
         //
         ElevatedButton(
           onPressed: () => Themed.of(ctx).transformColor = ColorRef.shadesOfGreyTransform,
-          child: const Text(
-              'Themed.of(ctx).transformColor = ColorRef.shadesOfGreyTransform',
-              textAlign: TextAlign.center),
+          child:
+              const Text('Themed.of(ctx).transformColor = ColorRef.shadesOfGreyTransform', textAlign: TextAlign.center),
         ),
         //
         ElevatedButton(
@@ -218,8 +217,7 @@ class _ColorSettingsPageState extends State<ColorSettingsPage> {
         //
         ElevatedButton(
           onPressed: () => Themed.of(ctx).transformTextStyle = largerText,
-          child: const Text('Themed.of(ctx).transformTextStyle = largerText',
-              textAlign: TextAlign.center),
+          child: const Text('Themed.of(ctx).transformTextStyle = largerText', textAlign: TextAlign.center),
         ),
         //
         ElevatedButton(
@@ -233,17 +231,13 @@ class _ColorSettingsPageState extends State<ColorSettingsPage> {
         ),
         //
         space16,
-        Text(
-            'Themed.of(ctx).ifCurrentThemeIs({}) == ${Themed.of(ctx).ifCurrentThemeIs({})}'),
+        Text('Themed.of(ctx).ifCurrentThemeIs({}) == ${Themed.of(ctx).ifCurrentThemeIs({})}'),
         space16,
-        Text(
-            'Themed.of(ctx).ifCurrentThemeIs(anotherTheme) == ${Themed.of(ctx).ifCurrentThemeIs(anotherTheme)}'),
+        Text('Themed.of(ctx).ifCurrentThemeIs(anotherTheme) == ${Themed.of(ctx).ifCurrentThemeIs(anotherTheme)}'),
         space16,
-        Text(
-            'Themed.of(ctx).ifCurrentThemeIs(yellowTheme) == ${Themed.of(ctx).ifCurrentThemeIs(yellowTheme)}'),
+        Text('Themed.of(ctx).ifCurrentThemeIs(yellowTheme) == ${Themed.of(ctx).ifCurrentThemeIs(yellowTheme)}'),
         space16,
-        Text(
-            'Themed.of(ctx).ifCurrentTransformColorIs(null) == ${Themed.of(ctx).ifCurrentTransformColorIs(null)}'),
+        Text('Themed.of(ctx).ifCurrentTransformColorIs(null) == ${Themed.of(ctx).ifCurrentTransformColorIs(null)}'),
         space16,
         Text(
             'Themed.of(ctx).ifCurrentTransformColorIs(ColorRef.shadesOfGreyTransform) == ${Themed.of(ctx).ifCurrentTransformColorIs(ColorRef.shadesOfGreyTransform)}'),
@@ -291,8 +285,7 @@ class _ColorSettingsPageState extends State<ColorSettingsPage> {
         //
         ElevatedButton(
           onPressed: () => Themed.transformColor = ColorRef.shadesOfGreyTransform,
-          child: const Text('Themed.transformColor = ColorRef.shadesOfGreyTransform',
-              textAlign: TextAlign.center),
+          child: const Text('Themed.transformColor = ColorRef.shadesOfGreyTransform', textAlign: TextAlign.center),
         ),
         //
         ElevatedButton(
@@ -307,8 +300,7 @@ class _ColorSettingsPageState extends State<ColorSettingsPage> {
         //
         ElevatedButton(
           onPressed: () => Themed.transformTextStyle = largerText,
-          child: const Text('Themed.transformTextStyle = largerText',
-              textAlign: TextAlign.center),
+          child: const Text('Themed.transformTextStyle = largerText', textAlign: TextAlign.center),
         ),
         //
         ElevatedButton(
@@ -324,30 +316,24 @@ class _ColorSettingsPageState extends State<ColorSettingsPage> {
         space16,
         Text('Themed.ifCurrentThemeIs({}) == ${Themed.ifCurrentThemeIs({})}'),
         space16,
-        Text(
-            'Themed.ifCurrentThemeIs(anotherTheme) == ${Themed.ifCurrentThemeIs(anotherTheme)}'),
+        Text('Themed.ifCurrentThemeIs(anotherTheme) == ${Themed.ifCurrentThemeIs(anotherTheme)}'),
         space16,
-        Text(
-            'Themed.ifCurrentThemeIs(yellowTheme) == ${Themed.ifCurrentThemeIs(yellowTheme)}'),
+        Text('Themed.ifCurrentThemeIs(yellowTheme) == ${Themed.ifCurrentThemeIs(yellowTheme)}'),
         space16,
-        Text(
-            'Themed.ifCurrentTransformColorIs(null) == ${Themed.ifCurrentTransformColorIs(null)}'),
+        Text('Themed.ifCurrentTransformColorIs(null) == ${Themed.ifCurrentTransformColorIs(null)}'),
         space16,
         Text(
             'Themed.ifCurrentTransformColorIs(ColorRef.shadesOfGreyTransform) == ${Themed.ifCurrentTransformColorIs(ColorRef.shadesOfGreyTransform)}'),
         space16,
-        Text(
-            'Themed.ifCurrentTransformTextStyleIs(null) == ${Themed.ifCurrentTransformTextStyleIs(null)}'),
+        Text('Themed.ifCurrentTransformTextStyleIs(null) == ${Themed.ifCurrentTransformTextStyleIs(null)}'),
         space16,
-        Text(
-            'Themed.ifCurrentTransformTextStyleIs(largerText) == ${Themed.ifCurrentTransformTextStyleIs(largerText)}'),
+        Text('Themed.ifCurrentTransformTextStyleIs(largerText) == ${Themed.ifCurrentTransformTextStyleIs(largerText)}'),
         space16,
       ],
     );
   }
 
-  static TextStyle largerText(TextStyle textStyle) =>
-      textStyle.copyWith(fontSize: textStyle.fontSize! * 1.5);
+  static TextStyle largerText(TextStyle textStyle) => textStyle.copyWith(fontSize: textStyle.fontSize! * 1.5);
 }
 
 class ExampleText extends StatelessWidget {

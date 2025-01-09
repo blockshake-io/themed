@@ -1,14 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:ui' as ui
-    show
-        ParagraphStyle,
-        TextStyle,
-        Shadow,
-        FontFeature,
-        TextHeightBehavior,
-        TextLeadingDistribution,
-        FontVariation;
+    show ParagraphStyle, TextStyle, Shadow, FontFeature, TextHeightBehavior, TextLeadingDistribution, FontVariation;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -63,6 +56,7 @@ class Themed extends StatefulWidget {
   static final _themedKey = GlobalKey<_ThemedState>();
 
   final Widget child;
+  final OnBrightnessChanged onBrightnessChanged;
 
   /// Saved themes.
   static final Map<Object, Map<ThemeRef, Object>> _saved = {};
@@ -113,10 +107,13 @@ class Themed extends StatefulWidget {
     Map<ThemeRef, Object>? defaultTheme,
     Map<ThemeRef, Object>? currentTheme,
     required this.child,
+    required this.onBrightnessChanged,
   }) : super(key: _themedKey) {
     if (defaultTheme != null) _defaultTheme = _toIdenticalKeyedMap(defaultTheme);
     if (currentTheme != null) _currentTheme = _toIdenticalKeyedMap(currentTheme);
   }
+
+  Map<ThemeRef, Object>? get currentThemeKey => _currentTheme;
 
   static void _setState() {
     _themedKey.currentState?.setState(() {}); // ignore: invalid_use_of_protected_member
@@ -258,8 +255,7 @@ class Themed extends StatefulWidget {
   /// Same as `Themed.ifCurrentTransformColorIs(...)`.
   ///
   /// Returns true if the given color transform is equal to the current one.
-  static bool ifCurrentTransformColorIs(Color Function(Color)? transform) =>
-      _ifCurrentTransformColorIs(transform);
+  static bool ifCurrentTransformColorIs(Color Function(Color)? transform) => _ifCurrentTransformColorIs(transform);
 
   /// Same as `Themed.ifCurrentTransformTextStyleIs(...)`.
   ///
@@ -274,8 +270,7 @@ class Themed extends StatefulWidget {
   /// Themed.of(context).theme = Locale("en", "US");
   ///
   static _ThemedState of(BuildContext context) {
-    _InheritedConstTheme? inherited =
-        context.dependOnInheritedWidgetOfExactType<_InheritedConstTheme>();
+    _InheritedConstTheme? inherited = context.dependOnInheritedWidgetOfExactType<_InheritedConstTheme>();
 
     if (inherited == null)
       throw ConstThemeException("Can't find the `Themed` widget up in the tree. "
@@ -391,8 +386,7 @@ class _ThemedState extends State<Themed> {
   ///
   /// Same as `Themed.ifCurrentTransformColorIs(...)`.
   ///
-  bool ifCurrentTransformColorIs(Color Function(Color)? transform) =>
-      _ifCurrentTransformColorIs(transform);
+  bool ifCurrentTransformColorIs(Color Function(Color)? transform) => _ifCurrentTransformColorIs(transform);
 
   /// Returns true if the given text style transform is equal to the current one.
   ///
@@ -405,7 +399,10 @@ class _ThemedState extends State<Themed> {
 
   @override
   Widget build(BuildContext context) {
+    final brightness = widget.onBrightnessChanged();
+
     return _InheritedConstTheme(
+      key: ValueKey<Brightness>(brightness),
       data: this,
       child: widget.child,
     );
@@ -554,8 +551,7 @@ class TextStyleRef extends TextStyle implements ThemeRef {
     TextStyle? result = _currentTheme[this] as TextStyle?;
     result ??= _defaultTheme[this] as TextStyle?;
     result ??= defaultTextStyle;
-    if (result == null)
-      throw ConstThemeException('Theme text-style "$id" is not defined.');
+    if (result == null) throw ConstThemeException('Theme text-style "$id" is not defined.');
     if (_transformTextStyle != null) result = _transformTextStyle!(result);
     return result;
   }
@@ -832,8 +828,7 @@ class TextStyleRef extends TextStyle implements ThemeRef {
     if (result != null) {
       int pos = result.indexOf('(');
       if (pos == -1) return result;
-      result =
-          'TextStyleRef(${result.substring(pos + 1, result.length - 1)}${id == null ? "" : ", id: $id"})';
+      result = 'TextStyleRef(${result.substring(pos + 1, result.length - 1)}${id == null ? "" : ", id: $id"})';
       return result;
     } else
       return 'TextStyleRef(id: ${id == null ? "" : id})';
@@ -862,6 +857,8 @@ Color Function(Color)? _transformColor;
 TextStyle Function(TextStyle)? _transformTextStyle;
 
 bool _rebuilding = false;
+
+typedef OnBrightnessChanged = Brightness Function();
 
 void _rebuildAllChildrenOfContext(BuildContext context) {
   void rebuild(Element el) {
@@ -897,8 +894,7 @@ void _setTransformColor(Color Function(Color)? transform) {
 }
 
 /// Returns true if the given color transform is equal to the current one.
-bool _ifCurrentTransformColorIs(Color Function(Color)? transform) =>
-    identical(transform, _transformColor);
+bool _ifCurrentTransformColorIs(Color Function(Color)? transform) => identical(transform, _transformColor);
 
 /// Sets a transform which will be applied to all colors.
 void _setTransformTextStyle(TextStyle Function(TextStyle)? transform) {
